@@ -30,10 +30,7 @@ class _WishlistPageState extends State<WishlistPage> {
               children: const [
                 Text(
                   "WishList",
-                  style: TextStyle(
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -45,9 +42,7 @@ class _WishlistPageState extends State<WishlistPage> {
                 final favorites = state.favorites;
 
                 if (favorites.isEmpty) {
-                  return const Center(
-                    child: Text('No favorites added yet.'),
-                  );
+                  return const Center(child: Text('No favorites added yet.'));
                 }
 
                 return Expanded(
@@ -65,9 +60,11 @@ class _WishlistPageState extends State<WishlistPage> {
                                 onPressed: (context) {
                                   // favoriteList.removeAt(index);
                                   // setState(() {
-                                    
+
                                   // });
-                                  context.read<FavoriteBloc>().add(ToggleFavoriteEvent(product)); // Removes from Bloc state
+                                  context.read<FavoriteBloc>().add(
+                                    ToggleFavoriteEvent(product),
+                                  ); // Removes from Bloc state
                                 },
                                 backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
@@ -87,7 +84,9 @@ class _WishlistPageState extends State<WishlistPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProductDetailsPage(product: product),
+                                  builder:
+                                      (context) =>
+                                          ProductDetailsPage(product: product),
                                 ),
                               );
                             },
@@ -110,8 +109,7 @@ class _WishlistPageState extends State<WishlistPage> {
                                     'Left: ${product.totalQuantity}',
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                ]
-                                
+                                ],
                               ),
                               leading: CircleAvatar(
                                 radius: 30,
@@ -133,9 +131,7 @@ class _WishlistPageState extends State<WishlistPage> {
                   ),
                 );
               } else {
-                return const Center(
-                  child: Text('No favorites added yet.'),
-                );
+                return const Center(child: Text('No favorites added yet.'));
               }
             },
           ),

@@ -1,11 +1,11 @@
 class Product {
   // properties of each product
-  final int id;
-  final String name;
-  final String category;
-  final String image;
-  final String description;
-  final double price;
+  int id;
+  String name;
+  int categoryId;
+  String image;
+  String description;
+  double price;
   int quantity;
   int totalQuantity;
 
@@ -14,11 +14,11 @@ class Product {
   Product({
     required this.id,
     required this.name,
-    required this.category,
+    required this.categoryId,
     required this.image,
     required this.description,
     required this.price,
     required this.quantity,
-    required this.totalQuantity
+    required this.totalQuantity,
   });
 }

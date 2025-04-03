@@ -4,6 +4,7 @@ import 'package:shopping/presentation/pages/details/CartDetailsPage.dart';
 import 'package:shopping/presentation/pages/details/ProductDetailsPage.dart';
 import 'package:shopping/presentation/utils/banner_image.dart';
 import 'package:shopping/presentation/utils/carousel_image.dart';
+import 'package:shopping/presentation/utils/category.dart';
 import 'package:shopping/presentation/utils/product_list.dart';
 import 'package:shopping/presentation/widgets/appBar.dart';
 import 'package:shopping/presentation/widgets/product_card.dart';
@@ -36,6 +37,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int isSelected = 0;
+  final List<Map<String, dynamic>> dataList = categories;
   @override
   Widget build(BuildContext context) {
     // Controller of Page View
@@ -107,41 +109,64 @@ class _HomePageState extends State<HomePage> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: [
-                        // _buildProductCategory(index: 0, name: 'All Products'),
-                        // _buildProductCategory(index: 1, name: 'T-Shirt'),
-                        // _buildProductCategory(index: 2, name: 'Polo-Shirt'),
-                        ProductCategory(
-                          index: 0,
-                          name: 'All',
-                          selectedIndex: isSelected,
-                          onTap: () {
-                            setState(() {
-                              isSelected = 0;
-                            });
-                          },
-                        ),
-                        ProductCategory(
-                          index: 1,
-                          name: 'T-Shirt',
-                          selectedIndex: isSelected,
-                          onTap: () {
-                            setState(() {
-                              isSelected = 1;
-                            });
-                          },
-                        ),
-                        ProductCategory(
-                          index: 2,
-                          name: 'Polo-Shirt',
-                          selectedIndex: isSelected,
-                          onTap: () {
-                            setState(() {
-                              isSelected = 2;
-                            });
-                          },
-                        ),
-                      ],
+                      // children: [
+                      //   // _buildProductCategory(index: 0, name: 'All Products'),
+                      //   // _buildProductCategory(index: 1, name: 'T-Shirt'),
+                      //   // _buildProductCategory(index: 2, name: 'Polo-Shirt'),
+                      //   ProductCategory(
+                      //     index: 0,
+                      //     name: 'All',
+                      //     selectedIndex: isSelected,
+                      //     onTap: () {
+                      //       setState(() {
+                      //         isSelected = 0;
+                      //       });
+                      //     },
+                      //   ),
+                      //   ProductCategory(
+                      //     index: 1,
+                      //     name: 'T-Shirt',
+                      //     selectedIndex: isSelected,
+                      //     onTap: () {
+                      //       setState(() {
+                      //         isSelected = 1;
+                      //       });
+                      //     },
+                      //   ),
+                      //   ProductCategory(
+                      //     index: 2,
+                      //     name: 'Polo-Shirt',
+                      //     selectedIndex: isSelected,
+                      //     onTap: () {
+                      //       setState(() {
+                      //         isSelected = 2;
+                      //       });
+                      //     },
+                      //   ),
+                      //   ProductCategory(
+                      //     index: 3,
+                      //     name: 'Casual',
+                      //     selectedIndex: isSelected,
+                      //     onTap: () {
+                      //       setState(() {
+                      //         isSelected = 3;
+                      //       });
+                      //     },
+                      //   ),
+                      // ],
+                      children:
+                          dataList.map((item) {
+                            return ProductCategory(
+                              index: item['id'],
+                              name: item['name'].toString().toUpperCase(),
+                              selectedIndex: isSelected,
+                              onTap: () {
+                                setState(() {
+                                  isSelected = item['id'];
+                                });
+                              },
+                            );
+                          }).toList(),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -151,7 +176,9 @@ class _HomePageState extends State<HomePage> {
                       ? ProductGrid(products: ProductList.allProducts)
                       : isSelected == 1
                       ? ProductGrid(products: ProductList.tShirtList)
-                      : ProductGrid(products: ProductList.poloShirtList),
+                      : isSelected == 2
+                      ? ProductGrid(products: ProductList.poloShirtList)
+                      : ProductGrid(products: ProductList.casualWear),
                 ],
               ),
             ),

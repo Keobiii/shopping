@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:shopping/presentation/pages/HomePage.dart';
+import 'package:shopping/presentation/pages/ProductFormPage.dart';
 import 'package:shopping/presentation/pages/SearchPage.dart';
 import 'package:shopping/presentation/pages/SettingsPage.dart';
 import 'package:shopping/presentation/pages/ShopPage.dart';
@@ -19,7 +21,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     HomePage(),
     ShopPage(),
     WishlistPage(),
-    SettingsPage(),
+    // SettingsPage(),
+    ProductFormPage(),
   ];
 
   void _onTabTapped(int index) {
@@ -32,21 +35,53 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: _pages),
-      bottomNavigationBar: NavigationBar(
-        height: 80,
-        elevation: 0,
-        backgroundColor: Colors.black,
-        selectedIndex: _currentIndex,
-        onDestinationSelected: _onTabTapped,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.shop_outlined), label: 'Shop'),
-          NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
-          NavigationDestination(
-            icon: Icon(Icons.person_2_outlined),
-            label: 'Profile',
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          backgroundColor: Colors.black,
+          indicatorColor: const Color.fromARGB(
+            255,
+            169,
+            169,
+            169,
+          ).withOpacity(0.2),
+          labelTextStyle: WidgetStateProperty.all(
+            TextStyle(
+              fontSize: 14,
+              height: 1.5,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
-        ],
+          iconTheme: WidgetStateProperty.resolveWith((state) {
+            if (state.contains(WidgetState.selected)) {
+              return IconThemeData(color: Colors.white);
+            }
+            return IconThemeData(color: Colors.grey);
+          }),
+        ),
+        child: NavigationBar(
+          height: 80,
+          selectedIndex: _currentIndex,
+          onDestinationSelected: _onTabTapped,
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(IconsaxPlusBold.home),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(IconsaxPlusBold.shop),
+              label: 'Shop',
+            ),
+            NavigationDestination(
+              icon: Icon(IconsaxPlusBold.heart),
+              label: 'Wishlist',
+            ),
+            NavigationDestination(
+              icon: Icon(IconsaxPlusBold.additem),
+              label: 'Add',
+            ),
+          ],
+        ),
       ),
     );
   }

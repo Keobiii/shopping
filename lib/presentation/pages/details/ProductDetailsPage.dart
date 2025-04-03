@@ -22,6 +22,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Details"), centerTitle: true),
+      backgroundColor: Color.fromARGB(255, 227, 227, 227),
       body: Column(
         children: [
           const SizedBox(height: 40),
@@ -31,7 +32,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               Container(
                 width: 220,
                 height: 220,
-                decoration: BoxDecoration(color: Colors.red.shade100),
                 child: Image.asset(widget.product.image, fit: BoxFit.contain),
               ),
             ],
@@ -64,8 +64,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        // if (widget.product.totalQuantity <= 0) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text(
+                        //         'Out of stock: ${widget.product.name}',
+                        //         style: const TextStyle(color: Colors.white),
+                        //       ),
+                        //       backgroundColor: Colors.red,
+                        //     ),
+                        //   );
+                        // }
                         Text(
-                          'Left: ${widget.product.totalQuantity}',
+                          widget.product.totalQuantity <= 0
+                              ? 'Out of stock'
+                              : 'Left: ${widget.product.totalQuantity}',
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -84,12 +97,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ],
                 ),
                 const SizedBox(height: 14.0),
-                Text(
-                  widget.product.description,
-                  textAlign: TextAlign.justify,
-                  style: const TextStyle(fontSize: 14),
+                Container(
+                  width: double.infinity,
+                  height: 100,
+                  child: Text(
+                    widget.product.description,
+                    textAlign: TextAlign.justify,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 5,
+                    style: const TextStyle(fontSize: 14),
+                  ),
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [

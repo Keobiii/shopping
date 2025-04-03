@@ -31,6 +31,7 @@ class ProductCategory extends StatelessWidget {
           name,
           style: TextStyle(
             color: selectedIndex == index ? Colors.white : Colors.black,
+            fontSize: 12,
           ),
         ),
       ),
