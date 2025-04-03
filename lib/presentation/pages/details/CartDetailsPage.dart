@@ -5,8 +5,10 @@ import 'package:shopping/data/providers/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping/presentation/pages/HomePage.dart';
 import 'package:shopping/presentation/state/bloc/cart_bloc.dart';
 import 'package:shopping/presentation/state/states/cart_state.dart';
+import 'package:shopping/presentation/widgets/bottom_navigation.dart';
 
 class CartListPage extends StatefulWidget {
   const CartListPage({super.key});
@@ -21,29 +23,22 @@ class _CartListPageState extends State<CartListPage> {
     // final provider  = CartProvider.of(context);
     // final cartList = provider.cart;
 
-
-    _buildProductQuantity(IconData icon, int index){
+    _buildProductQuantity(IconData icon, int index) {
       return GestureDetector(
         onTap: () {
           setState(() {
             icon == Icons.add
-              ? context.read<CartBloc>().add(IncrementCartQuantity(index))
-              : context.read<CartBloc>().add(DecrementCartQuantity(index));
+                ? context.read<CartBloc>().add(IncrementCartQuantity(index))
+                : context.read<CartBloc>().add(DecrementCartQuantity(index));
           });
         },
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: const Color.fromARGB(255, 255, 255, 255),
-            border: Border.all(
-              color: Colors.black,
-              width: 1
-            )
+            border: Border.all(color: Colors.black, width: 1),
           ),
-          child: Icon(
-            icon,
-            size: 20,
-          ),
+          child: Icon(icon, size: 20),
         ),
       );
     }
@@ -64,11 +59,8 @@ class _CartListPageState extends State<CartListPage> {
               children: [
                 Text(
                   "Cart",
-                  style: TextStyle(
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold
-                  ),
-                )
+                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),
@@ -77,11 +69,10 @@ class _CartListPageState extends State<CartListPage> {
             listener: (context, state) {
               if (state is CartError) {
                 showDialog(
-                  context: context, 
-                  builder: (context) => ErrorDialog(
-                    title: "Error", 
-                    message: state.message
-                  ),
+                  context: context,
+                  builder:
+                      (context) =>
+                          ErrorDialog(title: "Error", message: state.message),
                 );
               }
             },
@@ -91,9 +82,7 @@ class _CartListPageState extends State<CartListPage> {
                   final carts = state.cart;
 
                   if (carts.isEmpty) {
-                    return const Center(
-                      child: Text('No Item added yet.'),
-                    );
+                    return const Center(child: Text('No Item added yet.'));
                   }
 
                   return Expanded(
@@ -102,116 +91,117 @@ class _CartListPageState extends State<CartListPage> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                            child: Slidable(
+                          child: Slidable(
                             endActionPane: ActionPane(
-                              motion: const ScrollMotion(), 
+                              motion: const ScrollMotion(),
                               children: [
                                 SlidableAction(
-                                  onPressed: (context){
+                                  onPressed: (context) {
                                     // cartList.removeAt(index);
                                     carts.removeAt(index);
                                     // context.read<CartBloc>().add(ToggleCartEvent(widget.product));
-                                    setState(() {
-                                      
-                                    });
+                                    setState(() {});
                                   },
                                   backgroundColor: Colors.red,
                                   foregroundColor: Colors.white,
                                   icon: Icons.delete,
                                   label: 'Delete',
-                                )
-                              ]
+                                ),
+                              ],
                             ),
-                              child: ListTile(
-                                title: Text(
-                                  carts[index].name,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold
-                                  ),
+                            child: ListTile(
+                              title: Text(
+                                carts[index].name,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '\$${carts[index].price}',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    'Left: ${carts[index].totalQuantity}',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: AssetImage(carts[index].image),
+                                backgroundColor: Colors.grey.shade100,
+                              ),
+                              trailing: Container(
+                                width: 100,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
+                                    _buildProductQuantity(Icons.add, index),
                                     Text(
-                                      '\$${carts[index].price}',
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      'Left: ${carts[index].totalQuantity}',
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  ],
-                                ),
-                                leading: CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: AssetImage(carts[index].image),
-                                  backgroundColor: Colors.grey.shade100,
-                                ),
-                                trailing: Container(
-                                  width: 100,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      _buildProductQuantity(Icons.add, index),
-                                      Text(
-                                        '${carts[index].quantity}',
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold
-                                        ),
+                                      '${carts[index].quantity}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      _buildProductQuantity(Icons.remove, index)
-                                    ],
-                                  ),
+                                    ),
+                                    _buildProductQuantity(Icons.remove, index),
+                                  ],
                                 ),
                               ),
                             ),
+                          ),
                         );
                       },
                     ),
                   );
-                  
                 } else {
-                  return const Center(
-                    child: Text('No Item added yet.'),
-                  );
+                  return const Center(child: Text('No Item added yet.'));
                 }
               },
-            )
+            ),
           ),
         ],
       ),
 
-      bottomSheet: BottomAppBar(
-        color: Colors.white,
-        child: ElevatedButton.icon(
+      bottomSheet: BlocListener<CartBloc, CartState>(
+        listener: (context, state) {
+          if (state is CheckoutCompleted) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => BottomNavigationScreen()),
+              (route) => false,
+            );
+          }
+        },
+        child: BottomAppBar(
+          color: Colors.white,
+          child: ElevatedButton.icon(
             onPressed: () {
               context.read<CartBloc>().add(CheckoutEvent());
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Thank you for buying!'))
+                const SnackBar(content: Text('Thank you for buying!')),
               );
-            }, 
+            },
             label: Text(
               '\$ ${context.read<CartBloc>().getTotalPrice().toStringAsFixed(2)} Check Out',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: const BorderSide(color: Colors.black, width: 2),
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
               ),
             ),
-             style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            side: const BorderSide(
-              color: Colors.black,
-              width: 2,
-            ),
-            minimumSize: const Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            ),
-          ),
           ),
         ),
+      ),
     );
   }
 }

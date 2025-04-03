@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shopping/data/providers/cart_provider.dart';
 import 'package:shopping/data/providers/favorite_provider.dart';
 import 'package:shopping/presentation/state/bloc/cart_bloc.dart';
 import 'package:shopping/presentation/state/bloc/favorite_bloc.dart';
+import 'package:shopping/presentation/widgets/bottom_navigation.dart';
 import 'package:shopping/presentation/widgets/google_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +27,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: const BottomNavigationScreen(),
-        home: GoogleNavigation(),
+        home: const BottomNavigationScreen(),
+        theme: ThemeData(textTheme: GoogleFonts.merriweatherTextTheme()),
+        // home: GoogleNavigation(),
       ),
     );
   }

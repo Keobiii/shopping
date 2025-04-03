@@ -10,10 +10,7 @@ import 'package:shopping/presentation/state/states/favorite_state.dart';
 class ProductCard extends StatefulWidget {
   final Product product;
 
-  const ProductCard({
-    super.key,
-    required this.product
-  });
+  const ProductCard({super.key, required this.product});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -22,13 +19,10 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
-
     // final provider = FavoriteProvider.of(context);
 
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -36,8 +30,9 @@ class _ProductCardState extends State<ProductCard> {
             height: 160,
             width: 150,
             decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 227, 227, 227),
               border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(10)
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Stack(
               alignment: Alignment.center,
@@ -45,13 +40,10 @@ class _ProductCardState extends State<ProductCard> {
                 SizedBox(
                   height: 150,
                   width: 130,
-                  child: Image.asset(
-                    widget.product.image,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset(widget.product.image, fit: BoxFit.contain),
                 ),
                 Positioned(
-                  top: 10,
+                  bottom: 10,
                   right: 10,
                   // child: GestureDetector(
                   //       onTap: (){
@@ -66,49 +58,61 @@ class _ProductCardState extends State<ProductCard> {
                   //     ),
                   child: BlocBuilder<FavoriteBloc, FavoriteState>(
                     builder: (context, state) {
-                      final favorites = state is FavoriteLoaded ? state.favorites : [];
+                      final favorites =
+                          state is FavoriteLoaded ? state.favorites : [];
                       final isFavorite = favorites.contains(widget.product);
 
-                      return GestureDetector(
-                        onTap: () { 
-                          context.read<FavoriteBloc>().add(ToggleFavoriteEvent(widget.product));
-                        },
-                        child: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: Colors.red,
+                      return Container(
+                        alignment: Alignment.center,
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              spreadRadius: 3,
+                              blurRadius: 4,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.read<FavoriteBloc>().add(
+                              ToggleFavoriteEvent(widget.product),
+                            );
+                          },
+                          child: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: Colors.red,
+                            size: 20,
+                          ),
                         ),
                       );
                     },
-                    
                   ),
                 ),
-              ]
+              ],
             ),
           ),
 
-          SizedBox(height: 15,),
+          SizedBox(height: 15),
 
           Text(
             widget.product.name,
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Text(
-            '\$' '${widget.product.price}'
+            '\$'
+            '${widget.product.price}',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
           ),
-
-
-          Text(
-            widget.product.totalQuantity > 0
-              ? 'Left: ${widget.product.totalQuantity}'
-              : 'Out of Stock',
-            style: TextStyle(
-              color: widget.product.totalQuantity > 0 ? Colors.black : Colors.red,
-              fontSize: 16
-            ),
-          )
         ],
       ),
     );

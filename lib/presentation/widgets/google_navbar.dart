@@ -35,39 +35,27 @@ class _GoogleNavigationState extends State<GoogleNavigation> {
         ],
       ),
       bottomNavigationBar: Container(
-          color: Colors.black,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
-            child: GNav(
-              backgroundColor: Colors.black,
-              color: Colors.white,
-              activeColor: Colors.white,
-              tabBackgroundColor: Colors.grey.shade800,
-              gap: 8,
-              padding: EdgeInsets.all(16),
-              tabs: [
-                GButton(
-                icon: Icons.home_outlined,
-                text: 'Home',
-                ),                
-                GButton(
-                  icon: Icons.shopping_basket_outlined,
-                  text: 'Shop',
-                ),
-                GButton(
-                  icon: Icons.favorite_border,
-                  text: 'Wishlist',
-                ),
-                GButton(
-                  icon: Icons.settings,
-                  text: 'Settings',
-                ),
-              ],
-              selectedIndex: _selectedIndex,
-              onTabChange: _onTabTapped,
-            ),
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+          child: GNav(
+            backgroundColor: Colors.black,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.grey.shade800,
+            gap: 8,
+            padding: EdgeInsets.all(16),
+            tabs: [
+              GButton(icon: Icons.home_outlined, text: 'Home'),
+              GButton(icon: Icons.shopping_basket_outlined, text: 'Shop'),
+              GButton(icon: Icons.favorite_border, text: 'Wishlist'),
+              GButton(icon: Icons.settings, text: 'Settings'),
+            ],
+            selectedIndex: _selectedIndex,
+            onTabChange: _onTabTapped,
           ),
         ),
-      );
+      ),
+    );
   }
 }

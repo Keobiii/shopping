@@ -12,18 +12,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shopping/presentation/widgets/product_category.dart';
 import 'package:shopping/presentation/widgets/product_grid.dart';
 
-List<Widget> carouselItem = images.map((bannerImage) => Container(
-  padding: const EdgeInsets.all(8.0),
-  child: Container(
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Image.asset(
-        bannerImage, 
-        fit: BoxFit.fill,
-      ),
-    ),
-  ),
-)).toList();
+List<Widget> carouselItem =
+    images
+        .map(
+          (bannerImage) => Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(bannerImage, fit: BoxFit.fill),
+              ),
+            ),
+          ),
+        )
+        .toList();
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -64,7 +66,7 @@ class _HomePageState extends State<HomePage> {
     //         }
     //         // Print the currentPage value for debugging
     //         print('Current Page: $currentPage');
-            
+
     //         // Animate to the next page
     //         _pageController.animateToPage(
     //           currentPage,
@@ -85,7 +87,6 @@ class _HomePageState extends State<HomePage> {
     //   super.dispose();
     // }
 
-
     return Scaffold(
       appBar: const CustomAppBar(title: "Hello, Kerby!"),
       backgroundColor: Colors.white,
@@ -100,10 +101,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const Text(
                     'Our Products',
-                    style: TextStyle(
-                      fontSize: 27,
-                      fontWeight: FontWeight.bold
-                    ),
+                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                   ),
                   // Chips
                   SingleChildScrollView(
@@ -115,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                         // _buildProductCategory(index: 2, name: 'Polo-Shirt'),
                         ProductCategory(
                           index: 0,
-                          name: 'All Products',
+                          name: 'All',
                           selectedIndex: isSelected,
                           onTap: () {
                             setState(() {
@@ -147,25 +145,23 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-        
+
                   // Product Grid
                   isSelected == 0
                       ? ProductGrid(products: ProductList.allProducts)
                       : isSelected == 1
-                          ? ProductGrid(products: ProductList.tShirtList)
-                          : ProductGrid(products: ProductList.poloShirtList),
+                      ? ProductGrid(products: ProductList.tShirtList)
+                      : ProductGrid(products: ProductList.poloShirtList),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
-    
     );
-  
   }
 
-  // _buildProductCategory({required int index, required String name}) => 
+  // _buildProductCategory({required int index, required String name}) =>
   // GestureDetector(
   //   onTap: () {
   //     setState(() {
@@ -254,29 +250,28 @@ class _HomePageState extends State<HomePage> {
   //   },
   // );
 
-
   Container _caoursel(BuildContext context) {
     return Container(
-          height: MediaQuery.of(context).size.height * 0.20,
-          width: double.infinity,
-          child: Stack(
-            // children: [
-            //   PageView(
-            //     controller: _pageController,
-            //     children: carouselItem,
-            //   )
-            // ],
+      height: MediaQuery.of(context).size.height * 0.20,
+      width: double.infinity,
+      child: Stack(
+        // children: [
+        //   PageView(
+        //     controller: _pageController,
+        //     children: carouselItem,
+        //   )
+        // ],
+        children: [
+          PageView(
+            // controller: _pageController,
             children: [
-              PageView(
-                // controller: _pageController,
-                children: [
-                  for (var bannerItem in BannerImage.values)
-                    CaourselItem(bannerItem.imageAsset),
-                ],
-              )
+              for (var bannerItem in BannerImage.values)
+                CaourselItem(bannerItem.imageAsset),
             ],
           ),
-        );
+        ],
+      ),
+    );
   }
 
   Widget CaourselItem(bannerImage) {
@@ -285,16 +280,11 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            bannerImage,
-            fit: BoxFit.fill,
-          ),
+          child: Image.asset(bannerImage, fit: BoxFit.fill),
         ),
       ),
     );
   }
-
-  
 
   // Container _searchBar() {
   //   return Container(
@@ -359,7 +349,7 @@ class _HomePageState extends State<HomePage> {
   //       GestureDetector(
   //         onTap: (){
   //           Navigator.push(
-  //             context, 
+  //             context,
   //             MaterialPageRoute(
   //               builder: (context) => const CartListPage(),
   //             )
@@ -383,5 +373,4 @@ class _HomePageState extends State<HomePage> {
   //     ],
   //   );
   // }
-
 }

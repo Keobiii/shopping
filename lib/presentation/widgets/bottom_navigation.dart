@@ -3,6 +3,7 @@ import 'package:shopping/presentation/pages/HomePage.dart';
 import 'package:shopping/presentation/pages/SearchPage.dart';
 import 'package:shopping/presentation/pages/SettingsPage.dart';
 import 'package:shopping/presentation/pages/ShopPage.dart';
+import 'package:shopping/presentation/pages/WishlistPage.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -15,10 +16,10 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const HomePage(),
-    const ShopPage(),
-    const SearchPage(),
-    const SettingsPage(),
+    HomePage(),
+    ShopPage(),
+    WishlistPage(),
+    SettingsPage(),
   ];
 
   void _onTabTapped(int index) {
@@ -30,20 +31,21 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: NavigationBar(
         height: 80,
         elevation: 0,
+        backgroundColor: Colors.black,
         selectedIndex: _currentIndex,
         onDestinationSelected: _onTabTapped,
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.shop_outlined), label: 'Shop'),
           NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
-          NavigationDestination(icon: Icon(Icons.person_2_outlined), label: 'Profile'),
+          NavigationDestination(
+            icon: Icon(Icons.person_2_outlined),
+            label: 'Profile',
+          ),
         ],
       ),
     );

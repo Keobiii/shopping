@@ -9,10 +9,7 @@ import 'package:flutter/material.dart';
 class ProductDetailsPage extends StatefulWidget {
   final Product product;
 
-  const ProductDetailsPage({
-    super.key,
-    required this.product,
-  });
+  const ProductDetailsPage({super.key, required this.product});
 
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
@@ -24,31 +21,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Details"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Details"), centerTitle: true),
       body: Column(
         children: [
-          const SizedBox(height: 36),
+          const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 width: 220,
                 height: 220,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red.shade100,
-                ),
-                child: Image.asset(
-                  widget.product.image,
-                  fit: BoxFit.cover,
-                ),
+                decoration: BoxDecoration(color: Colors.red.shade100),
+                child: Image.asset(widget.product.image, fit: BoxFit.contain),
               ),
             ],
           ),
-          const SizedBox(height: 36.0),
           Container(
             padding: const EdgeInsets.all(20),
             width: double.infinity,
@@ -74,13 +61,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           style: const TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Text(
                           'Left: ${widget.product.totalQuantity}',
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -202,9 +191,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               print("Product Added to Cart: ${widget.product}");
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const CartListPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const CartListPage()),
               );
             }
           },
@@ -215,17 +202,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
           label: const Text(
             'Add to Cart',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-            ),
+            style: TextStyle(color: Colors.black, fontSize: 18),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
-            side: const BorderSide(
-              color: Colors.black,
-              width: 2,
-            ),
+            side: const BorderSide(color: Colors.black, width: 2),
             minimumSize: const Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),

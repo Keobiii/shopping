@@ -1,13 +1,14 @@
 import 'dart:math';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping/data/models/Product.dart';
 import 'package:shopping/presentation/state/states/cart_state.dart';
 
-abstract class CartEvent{}
+abstract class CartEvent {}
 
 // List of the functions and their constractor
-class ToggleCartEvent extends CartEvent{
+class ToggleCartEvent extends CartEvent {
   final Product product;
 
   ToggleCartEvent(this.product);
@@ -33,18 +34,23 @@ class DecrementCartQuantity extends CartEvent {
 
 class CheckoutEvent extends CartEvent {}
 
+class CheckoutCompleted extends CartState {
+  final List<Product> cart;
+
+  CheckoutCompleted(this.cart);
+}
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CarrtInital()) {
-
     // Add Item on the Cart
     on<ToggleCartEvent>((event, emit) {
-      List<Product> updatedCart = state is CartLoaded
-        ? List<Product>.from((state as CartLoaded).cart)
-        : [];
+      List<Product> updatedCart =
+          state is CartLoaded
+              ? List<Product>.from((state as CartLoaded).cart)
+              : [];
 
       if (updatedCart.contains(event.product)) {
-        for(Product element in updatedCart) {
+        for (Product element in updatedCart) {
           element.quantity++;
 
           // print('Quantity: ' + element.quantity.toString());
@@ -52,14 +58,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           // if (element.quantity > element.totalQuantity) {
           //   // Error
           //   emit(CartError("Quantity exceeds available stock"));
-            
+
           //   return;
           // }
         }
       } else {
         updatedCart.add(event.product);
       }
-
 
       emit(CartLoaded(updatedCart));
     });
@@ -68,16 +73,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     // plus check if the quantity is exceeds to the total quantity
     on<IncrementCartQuantity>((event, emit) {
       if (state is CartLoaded) {
-        List<Product> updatedCart = List<Product>.from((state as CartLoaded).cart);
+        List<Product> updatedCart = List<Product>.from(
+          (state as CartLoaded).cart,
+        );
         updatedCart[event.index].quantity++;
 
         print('Quantity: ' + updatedCart[event.index].quantity.toString());
 
-        if (updatedCart[event.index].quantity > updatedCart[event.index].totalQuantity) {
+        if (updatedCart[event.index].quantity >
+            updatedCart[event.index].totalQuantity) {
           emit(CartError("Quantity exceeds available stock"));
-          
+
           if (updatedCart[event.index].quantity <= 1) {
-          updatedCart.removeAt(event.index);
+            updatedCart.removeAt(event.index);
           } else {
             updatedCart[event.index].quantity--;
           }
@@ -93,7 +101,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     // Decrement the Item Quantity
     on<DecrementCartQuantity>((event, emit) {
       if (state is CartLoaded) {
-        List<Product> updatedCart = List<Product>.from((state as CartLoaded).cart);
+        List<Product> updatedCart = List<Product>.from(
+          (state as CartLoaded).cart,
+        );
 
         if (updatedCart[event.index].quantity <= 1) {
           updatedCart.removeAt(event.index);
@@ -118,25 +128,29 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     // Checkout
     on<CheckoutEvent>((event, emit) {
       if (state is CartLoaded) {
-        List<Product> updatedCart = List<Product>.from((state as CartLoaded).cart);
+        List<Product> updatedCart = List<Product>.from(
+          (state as CartLoaded).cart,
+        );
 
         for (Product product in updatedCart) {
-          product.totalQuantity -= product.quantity; 
+          product.totalQuantity -= product.quantity;
           product.quantity = 1;
         }
 
         updatedCart.clear();
 
-        emit(CartLoaded(updatedCart)); 
+        emit(CartLoaded(updatedCart));
+        emit(CheckoutCompleted(updatedCart));
       }
     });
-
   }
 
   double getTotalPrice() {
     if (state is CartLoaded) {
       return (state as CartLoaded).cart.fold(
-        0.0, (total, product) => total + (product.price * product.quantity));
+        0.0,
+        (total, product) => total + (product.price * product.quantity),
+      );
     }
 
     return 0.0;
