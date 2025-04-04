@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shopping/data/providers/cart_provider.dart';
 import 'package:shopping/data/providers/favorite_provider.dart';
 import 'package:shopping/presentation/pages/login/register/LoginPage.dart';
+import 'package:shopping/presentation/pages/login/register/SignUpPage.dart';
 import 'package:shopping/presentation/state/bloc/cart_bloc.dart';
 import 'package:shopping/presentation/state/bloc/favorite_bloc.dart';
 import 'package:shopping/presentation/state/bloc/product_bloc.dart';

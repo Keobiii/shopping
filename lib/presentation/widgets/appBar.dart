@@ -5,33 +5,29 @@ import 'package:shopping/presentation/pages/details/CartDetailsPage.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  const CustomAppBar({
-    super.key,
-    required this.title,
-  });
+  const CustomAppBar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       title: Text(
         title,
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 18,
-          fontWeight: FontWeight.bold
+          fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       elevation: 1.0,
       centerTitle: false,
       actions: [
         GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.push(
-              context, 
-              MaterialPageRoute(
-                builder: (context) => const CartListPage(),
-              )
+              context,
+              MaterialPageRoute(builder: (context) => const CartListPage()),
             );
           },
           child: Container(
@@ -40,12 +36,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             width: 37,
             child: SvgPicture.asset(
               'assets/vectors/cart.svg',
+              color: Colors.white,
               height: 20,
               width: 20,
             ),
             decoration: BoxDecoration(
-              color: Color(0xFFf7f8f8),
-              borderRadius: BorderRadius.circular(10)
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
         ),

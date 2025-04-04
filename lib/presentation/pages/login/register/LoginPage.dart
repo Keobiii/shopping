@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:shopping/presentation/pages/login/register/SignUpPage.dart';
+import 'package:shopping/presentation/widgets/bottom_navigation.dart';
+import 'package:shopping/presentation/widgets/textfield.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,27 +16,113 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: Colors.white,
-          ),
+      backgroundColor: const Color(0xFFFCFCFF),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Image.asset(
+                  'assets/images/shopify-logo.png',
+                  width: 150,
+                ),
+              ),
+              SizedBox(height: 40),
+              CustomTextFormField(
+                labelText: 'Email',
+                icon: Icons.person_outline_outlined,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value == null || value.toString().isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+              CustomTextFormField(
+                labelText: 'Password',
+                icon: Icons.password_outlined,
+                isPassword: true,
+                keyboardType: TextInputType.visiblePassword,
+                validator: (value) {
+                  if (value == null || value.toString().isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BottomNavigationScreen(),
+                    ),
+                  );
+                },
+                label: const Text(
+                  'Login',
+                  style: TextStyle(color: Colors.black, fontSize: 14),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFFCFCFF),
+                  side: const BorderSide(color: Colors.black, width: 1),
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
 
-          Positioned(
-            bottom: -10,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/images/contour_bg_1.png',
-              fit: BoxFit.fitWidth,
-            ),
-          ),
+              SizedBox(height: 50),
 
-          Center(child: Text('Explore...')),
-        ],
+              Row(
+                children: [
+                  Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("OR", style: const TextStyle(fontSize: 16)),
+                  ),
+                  Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                ],
+              ),
+
+              SizedBox(height: 20),
+
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignUpPage()),
+                  );
+                },
+                label: const Text(
+                  'Login with Google',
+                  style: TextStyle(color: Colors.black, fontSize: 14),
+                ),
+                icon: SizedBox(
+                  height: 25,
+                  width: 25,
+                  child: SvgPicture.asset('assets/vectors/google.svg'),
+                ),
+
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFFCFCFF),
+                  side: const BorderSide(color: Colors.black, width: 1),
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

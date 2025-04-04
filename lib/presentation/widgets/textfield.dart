@@ -79,7 +79,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                       ? IconButton(
                         icon: Icon(
                           _isPassword ? Icons.visibility : Icons.visibility_off,
-                          color: Colors.white30,
+                          color: Colors.black,
                         ),
                         onPressed: () {
                           setState(() {
