@@ -143,9 +143,7 @@ class ProductList {
   ];
 
   // Combine T-Shirt and Polo-Shirt Lists
-  static List<Product> allProducts = [
-    ...tShirtList,
-    ...poloShirtList,
-    ...casualWear,
-  ];
+  static List<Product> get allProducts {
+    return [...tShirtList, ...poloShirtList, ...casualWear];
+  }
 }

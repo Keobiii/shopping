@@ -36,6 +36,38 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late PageController _pageController;
+  Timer? _timer;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pageController = PageController();
+
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      if (_currentIndex < BannerImage.values.length - 1) {
+        _currentIndex++;
+      } else {
+        _currentIndex = 0;
+      }
+
+      _pageController.animateToPage(
+        _currentIndex,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
   int isSelected = 0;
   final List<Map<String, dynamic>> dataList = categories;
   @override
@@ -281,21 +313,16 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.20,
       width: double.infinity,
-      child: Stack(
-        // children: [
-        //   PageView(
-        //     controller: _pageController,
-        //     children: carouselItem,
-        //   )
-        // ],
+      child: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         children: [
-          PageView(
-            // controller: _pageController,
-            children: [
-              for (var bannerItem in BannerImage.values)
-                CaourselItem(bannerItem.imageAsset),
-            ],
-          ),
+          for (var bannerItem in BannerImage.values)
+            CaourselItem(bannerItem.imageAsset),
         ],
       ),
     );

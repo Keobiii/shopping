@@ -42,30 +42,52 @@ class _ProductFormPageState extends State<ProductFormPage> {
     });
   }
 
+  // List<DropdownMenuItem<String>> get dropdownItems {
+  //   // getting categories list except for the id = 0
+  //   List<Map<String, dynamic>> filteredCategories =
+  //       categories.where((item) => item['id'] != 0).toList();
+
+  //   // Dropdown menu
+  //   List<DropdownMenuItem<String>> menuItems =
+  //       filteredCategories.map((item) {
+  //         return DropdownMenuItem(
+  //           child: Text(item['name'].toString()),
+  //           value: item['id'].toString(),
+  //         );
+  //       }).toList();
+
+  //   return menuItems;
+  // }
+
+  // Dynamic getter for allProducts
+  List<Product> get allProducts {
+    return [
+      ...ProductList.tShirtList,
+      ...ProductList.poloShirtList,
+      ...ProductList.casualWear,
+    ];
+  }
+
+  // Dropdown items for categories
   List<DropdownMenuItem<String>> get dropdownItems {
-    // getting categories list except for the id = 0
     List<Map<String, dynamic>> filteredCategories =
         categories.where((item) => item['id'] != 0).toList();
 
-    // Dropdown menu
-    List<DropdownMenuItem<String>> menuItems =
-        filteredCategories.map((item) {
-          return DropdownMenuItem(
-            child: Text(item['name'].toString()),
-            value: item['id'].toString(),
-          );
-        }).toList();
-
-    return menuItems;
+    return filteredCategories.map((item) {
+      return DropdownMenuItem(
+        child: Text(item['name'].toString()),
+        value: item['id'].toString(),
+      );
+    }).toList();
   }
 
   String? selectedValue = null;
 
-  final List<Product> allProducts = [
-    ...ProductList.tShirtList,
-    ...ProductList.poloShirtList,
-    ...ProductList.casualWear,
-  ];
+  // final List<Product> allProducts = [
+  //   ...ProductList.tShirtList,
+  //   ...ProductList.poloShirtList,
+  //   ...ProductList.casualWear,
+  // ];
 
   // Variable to hold the selected product
   Product? selectedProduct;
@@ -80,7 +102,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_addProductForm(context), _getProductData()],
+            children: [_getProductData(), _addProductForm(context)],
           ),
         ),
       ),
@@ -102,18 +124,19 @@ class _ProductFormPageState extends State<ProductFormPage> {
               DropdownButtonFormField<Product>(
                 decoration: InputDecoration(border: OutlineInputBorder()),
                 hint: Text("Choose a product"),
-                value: selectedProduct,
+                value: selectedProduct, // Initial value of dropdown
                 onChanged: (Product? newValue) {
                   setState(() {
                     isEditingMode = true;
                     selectedProduct = newValue;
+
+                    // Update form fields dynamically
                     _productIDController.text = newValue?.id.toString() ?? '';
                     _productNameController.text = newValue?.name ?? '';
                     _descriptionController.text = newValue?.description ?? '';
                     _priceController.text = newValue?.price.toString() ?? '';
                     _quantityController.text =
                         newValue?.totalQuantity.toString() ?? '';
-
                     selectedValue = newValue?.categoryId.toString() ?? '';
                   });
                 },
@@ -216,7 +239,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 10),
-              DropdownButtonFormField(
+              DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black, width: 2),

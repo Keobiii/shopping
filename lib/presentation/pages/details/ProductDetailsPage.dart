@@ -130,7 +130,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       selectedIndex: selectedIndex,
                       onSelected: (index) {
                         setState(() {
-                          selectedIndex = index; // Update selected size
+                          selectedIndex = index;
                         });
                       },
                     ),

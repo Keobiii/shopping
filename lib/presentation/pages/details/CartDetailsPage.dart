@@ -91,24 +91,29 @@ class _CartListPageState extends State<CartListPage> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Slidable(
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    // cartList.removeAt(index);
-                                    carts.removeAt(index);
-                                    // context.read<CartBloc>().add(ToggleCartEvent(widget.product));
-                                    setState(() {});
-                                  },
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete,
-                                  label: 'Delete',
-                                ),
-                              ],
+                          child: Dismissible(
+                            key: Key(carts[index].id.toString()),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
                             ),
+                            onDismissed: (direction) {
+                              carts.removeAt(index);
+                              setState(() {});
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Item removed from cart'),
+                                ),
+                              );
+                            },
                             child: ListTile(
                               title: Text(
                                 carts[index].name,
