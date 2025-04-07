@@ -24,30 +24,45 @@ import 'package:shopping/data/models/Product.dart';
 //   ProductState({required this.products, this.selectedProduct});
 // }
 
-abstract class ProductFormState {}
+// abstract class ProductFormState {}
 
-class ProductFormInitial extends ProductFormState {}
+// class ProductFormInitial extends ProductFormState {}
 
-class ProductFormLoaded extends ProductFormState {
-  final List<Product> products;
-  final Product? selectedProduct;
-  final bool isEditing;
+// class ProductFormLoaded extends ProductFormState {
+//   final List<Product> products;
+//   final Product? selectedProduct;
+//   final bool isEditing;
 
-  ProductFormLoaded({
-    required this.products,
-    this.selectedProduct,
-    this.isEditing = false,
-  });
+//   ProductFormLoaded({
+//     required this.products,
+//     this.selectedProduct,
+//     this.isEditing = false,
+//   });
 
-  ProductFormLoaded copyWith({
-    List<Product>? products,
-    Product? selectedProduct,
-    bool? isEditing,
-  }) {
-    return ProductFormLoaded(
-      products: products ?? this.products,
-      selectedProduct: selectedProduct ?? this.selectedProduct,
-      isEditing: isEditing ?? this.isEditing,
-    );
-  }
+//   ProductFormLoaded copyWith({
+//     List<Product>? products,
+//     Product? selectedProduct,
+//     bool? isEditing,
+//   }) {
+//     return ProductFormLoaded(
+//       products: products ?? this.products,
+//       selectedProduct: selectedProduct ?? this.selectedProduct,
+//       isEditing: isEditing ?? this.isEditing,
+//     );
+//   }
+// }
+
+sealed class ProductState {}
+
+final class ProductInitial extends ProductState {}
+
+final class ProductLoaded extends ProductState {
+  final List<Product> product_model;
+
+  ProductLoaded({required this.product_model});
+}
+
+final class UpdateProductData extends ProductState {
+  final Product updatedProduct;
+  UpdateProductData({required this.updatedProduct});
 }

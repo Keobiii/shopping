@@ -10,14 +10,14 @@ import 'package:shopping/presentation/utils/product_list.dart';
 import 'package:shopping/presentation/widgets/appBar.dart';
 import 'package:shopping/presentation/widgets/textfield.dart';
 
-class ProductFormPage extends StatefulWidget {
-  const ProductFormPage({super.key});
+class AddProduct extends StatefulWidget {
+  const AddProduct({super.key});
 
   @override
-  State<ProductFormPage> createState() => _ProductFormPageState();
+  State<AddProduct> createState() => _AddProductState();
 }
 
-class _ProductFormPageState extends State<ProductFormPage> {
+class _AddProductState extends State<AddProduct> {
   final _formKey = GlobalKey<FormState>();
 
   bool isEditingMode = false;

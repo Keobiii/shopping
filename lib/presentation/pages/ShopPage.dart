@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shopping/presentation/state/bloc/product_bloc.dart';
+import 'package:shopping/presentation/state/states/product_state.dart';
 import 'package:shopping/presentation/utils/category.dart';
 import 'package:shopping/presentation/utils/product_list.dart';
 import 'package:shopping/presentation/widgets/appBar.dart';
 import 'package:shopping/presentation/widgets/product_category.dart';
 import 'package:shopping/presentation/widgets/product_grid.dart';
+import 'package:shopping/presentation/widgets/products_ui.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -22,100 +26,23 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       appBar: const CustomAppBar(title: "Hello, Kerby!"),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _searchBar(),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Our Products',
-                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 15),
-                  // Chips
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      // children: [
-                      //   // _buildProductCategory(index: 0, name: 'All Products'),
-                      //   // _buildProductCategory(index: 1, name: 'T-Shirt'),
-                      //   // _buildProductCategory(index: 2, name: 'Polo-Shirt'),
-
-                      //   ProductCategory(
-                      //     index: 0,
-                      //     name: 'All Products',
-                      //     selectedIndex: isSelected,
-                      //     onTap: () {
-                      //       setState(() {
-                      //         isSelected = 0;
-                      //       });
-                      //     },
-                      //   ),
-                      //   ProductCategory(
-                      //     index: 1,
-                      //     name: 'T-Shirt',
-                      //     selectedIndex: isSelected,
-                      //     onTap: () {
-                      //       setState(() {
-                      //         isSelected = 1;
-                      //       });
-                      //     },
-                      //   ),
-                      //   ProductCategory(
-                      //     index: 2,
-                      //     name: 'Polo-Shirt',
-                      //     selectedIndex: isSelected,
-                      //     onTap: () {
-                      //       setState(() {
-                      //         isSelected = 2;
-                      //       });
-                      //     },
-                      //   ),
-                      //   ProductCategory(
-                      //     index: 3,
-                      //     name: 'Casual',
-                      //     selectedIndex: isSelected,
-                      //     onTap: () {
-                      //       setState(() {
-                      //         isSelected = 3;
-                      //       });
-                      //     },
-                      //   ),
-                      // ],
-                      children:
-                          dataList.map((item) {
-                            return ProductCategory(
-                              index: item['id'],
-                              name: item['name'].toString().toUpperCase(),
-                              selectedIndex: isSelected,
-                              onTap: () {
-                                setState(() {
-                                  isSelected = item['id'];
-                                });
-                              },
-                            );
-                          }).toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Product Grid
-                  isSelected == 0
-                      ? ProductGrid(products: ProductList.allProducts)
-                      : isSelected == 1
-                      ? ProductGrid(products: ProductList.tShirtList)
-                      : isSelected == 2
-                      ? ProductGrid(products: ProductList.poloShirtList)
-                      : ProductGrid(products: ProductList.casualWear),
-                ],
-              ),
+      body: BlocConsumer<ProductBloc, ProductState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                _searchBar(),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ProductsUI(),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

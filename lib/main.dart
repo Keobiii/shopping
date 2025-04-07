@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping/data/providers/cart_provider.dart';
 import 'package:shopping/data/providers/favorite_provider.dart';
 import 'package:shopping/presentation/pages/login/register/LoginPage.dart';
@@ -16,24 +17,49 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Widget _currentScreen = Scaffold(
+    body: Center(child: CircularProgressIndicator()),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    checkCredentials();
+  }
+
+  Future<void> checkCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user_token');
+    print("Token in Main: " + userToken.toString());
+
+    setState(() {
+      _currentScreen =
+          (userToken == null || userToken.isEmpty)
+              ? LoginPage()
+              : BottomNavigationScreen();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // ChangeNotifierProvider(create: (_) => FavoriteProvider()),
-        // ChangeNotifierProvider(create: (_) => CartProvider())
         BlocProvider(create: (_) => FavoriteBloc()),
         BlocProvider(create: (_) => CartBloc()),
+        BlocProvider(create: (_) => ProductBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: const BottomNavigationScreen(),
-        home: LoginPage(),
         theme: ThemeData(textTheme: GoogleFonts.merriweatherTextTheme()),
-        // home: GoogleNavigation(),
+        home: _currentScreen,
       ),
     );
   }

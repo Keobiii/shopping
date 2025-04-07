@@ -10,23 +10,24 @@ import 'package:shopping/presentation/utils/product_list.dart';
 import 'package:shopping/presentation/widgets/appBar.dart';
 import 'package:shopping/presentation/widgets/textfield.dart';
 
-class ProductFormPage extends StatefulWidget {
-  const ProductFormPage({super.key});
+class EditProduct extends StatefulWidget {
+  final int productId;
+  const EditProduct({super.key, required this.productId});
 
   @override
-  State<ProductFormPage> createState() => _ProductFormPageState();
+  State<EditProduct> createState() => _EditProductState();
 }
 
-class _ProductFormPageState extends State<ProductFormPage> {
+class _EditProductState extends State<EditProduct> {
   final _formKey = GlobalKey<FormState>();
 
   bool isEditingMode = false;
 
-  final _productIDController = TextEditingController();
-  final _productNameController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _quantityController = TextEditingController();
-  final _priceController = TextEditingController();
+  final _editProductIDController = TextEditingController();
+  final _editProductNameController = TextEditingController();
+  final _editDescriptionController = TextEditingController();
+  final _editQuantityController = TextEditingController();
+  final _editPriceController = TextEditingController();
 
   // Dropdown items for categories
   List<DropdownMenuItem<String>> get dropdownItems {
@@ -45,6 +46,19 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final productBloc = context.read<ProductBloc>();
+    final productList = productBloc.products;
+
+    final product = productList.firstWhere((s) => s.id == widget.productId);
+
+    _editProductIDController.text = product.id.toString();
+    _editProductNameController.text = product.name;
+    _editDescriptionController.text = product.description;
+    _editQuantityController.text = product.totalQuantity.toString();
+    _editPriceController.text = product.price.toString();
+
+    selectedValue = product.categoryId.toString();
+
     return Scaffold(
       appBar: const CustomAppBar(title: "Hello, Kerby!"),
       backgroundColor: Colors.white,
@@ -53,14 +67,14 @@ class _ProductFormPageState extends State<ProductFormPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_addProductForm(context)],
+            children: [_EditProductForm(context)],
           ),
         ),
       ),
     );
   }
 
-  Form _addProductForm(BuildContext context) {
+  Form _EditProductForm(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
@@ -69,27 +83,27 @@ class _ProductFormPageState extends State<ProductFormPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Add Product',
+                'Update Product',
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
               ),
             ],
           ),
           SizedBox(height: 50),
 
-          // CustomTextFormField(
-          //   controller: _productIDController,
-          //   labelText: 'Product ID',
-          //   icon: Icons.person_outline_outlined,
-          //   keyboardType: TextInputType.text,
-          //   validator: (value) {
-          //     if (value == null || value.toString().isEmpty) {
-          //       return 'Please enter some text';
-          //     }
-          //     return null;
-          //   },
-          // ),
           CustomTextFormField(
-            controller: _productNameController,
+            controller: _editProductIDController,
+            labelText: 'Product ID',
+            icon: Icons.person_outline_outlined,
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (value == null || value.toString().isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          CustomTextFormField(
+            controller: _editProductNameController,
             labelText: 'Product Name',
             icon: Icons.person_outline_outlined,
             keyboardType: TextInputType.text,
@@ -137,7 +151,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
               SizedBox(height: 20),
               CustomTextFormField(
-                controller: _descriptionController,
+                controller: _editDescriptionController,
                 labelText: 'Description',
                 icon: Icons.person_outline_outlined,
                 keyboardType: TextInputType.text,
@@ -152,7 +166,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
               SizedBox(height: 20),
               CustomTextFormField(
-                controller: _priceController,
+                controller: _editPriceController,
                 isNumber: true,
                 labelText: 'Price',
                 icon: Icons.person_outline_outlined,
@@ -167,7 +181,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
               SizedBox(height: 20),
               CustomTextFormField(
-                controller: _quantityController,
+                controller: _editQuantityController,
                 isNumber: true,
                 labelText: 'Quantity',
                 icon: Icons.person_outline_outlined,
@@ -188,10 +202,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        final price_ = _priceController.text;
+                        final price_ = _editPriceController.text;
                         var finalPrice;
 
-                        final quantity_ = _quantityController.text;
+                        final quantity_ = _editQuantityController.text;
                         var finalQuan;
 
                         try {
@@ -231,18 +245,33 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             throw Exception('Invalid categoryId');
                         }
 
+                        print(widget.productId);
+                        print(
+                          "Dispatching update for product ID: ${widget.productId}",
+                        );
                         final product = Product(
-                          id: 0,
-                          name: _productNameController.text,
+                          id: widget.productId,
+                          name: _editProductNameController.text,
                           categoryId: categoryId,
                           image: 'assets/images/casual/img2.png',
-                          description: _descriptionController.text,
+                          description: _editDescriptionController.text,
                           price: finalPrice,
                           quantity: 1,
                           totalQuantity: finalQuan,
                         );
+
+                        print("Final Product Data:");
+                        print("ID: ${product.id}");
+                        print("Name: ${product.name}");
+                        print("Category ID: ${product.categoryId}");
+                        print("Image: ${product.image}");
+                        print("Description: ${product.description}");
+                        print("Price: ${product.price}");
+                        print("Quantity: ${product.quantity}");
+                        print("Total Quantity: ${product.totalQuantity}");
+
                         context.read<ProductBloc>().add(
-                          AddProductRequest(product: product),
+                          ProductUpdateRequest(updatedProduct: product),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -256,7 +285,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       child: Column(
                         children: [
                           Text(
-                            'Add Product',
+                            'Update Product',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

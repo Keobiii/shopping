@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping/main.dart';
 import 'package:shopping/presentation/pages/HomePage.dart';
 import 'package:shopping/presentation/pages/ProductFormPage.dart';
 import 'package:shopping/presentation/pages/SearchPage.dart';
 import 'package:shopping/presentation/pages/SettingsPage.dart';
 import 'package:shopping/presentation/pages/ShopPage.dart';
 import 'package:shopping/presentation/pages/WishlistPage.dart';
+import 'package:shopping/presentation/pages/product/view_product.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -16,14 +19,29 @@ class BottomNavigationScreen extends StatefulWidget {
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int _currentIndex = 0;
+  List<Widget> _pages = [];
+  String? userToken;
 
-  final List<Widget> _pages = [
-    HomePage(),
-    ShopPage(),
-    WishlistPage(),
-    // SettingsPage(),
-    ProductFormPage(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    loadUserToken();
+  }
+
+  Future<void> loadUserToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    userToken = prefs.getString('user_token');
+
+    setState(() {
+      _pages = [
+        HomePage(),
+        ShopPage(),
+        WishlistPage(),
+        if (userToken == "admin") ViewProduct(),
+        SettingsPage(),
+      ];
+    });
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -63,22 +81,27 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           height: 80,
           selectedIndex: _currentIndex,
           onDestinationSelected: _onTabTapped,
-          destinations: const [
-            NavigationDestination(
+          destinations: [
+            const NavigationDestination(
               icon: Icon(IconsaxPlusBold.home),
               label: 'Home',
             ),
-            NavigationDestination(
+            const NavigationDestination(
               icon: Icon(IconsaxPlusBold.shop),
               label: 'Shop',
             ),
-            NavigationDestination(
+            const NavigationDestination(
               icon: Icon(IconsaxPlusBold.heart),
               label: 'Wishlist',
             ),
-            NavigationDestination(
-              icon: Icon(IconsaxPlusBold.additem),
-              label: 'Add',
+            if (userToken == "admin")
+              const NavigationDestination(
+                icon: Icon(IconsaxPlusBold.additem),
+                label: 'Add',
+              ),
+            const NavigationDestination(
+              icon: Icon(Icons.person_3_outlined),
+              label: 'Settings',
             ),
           ],
         ),

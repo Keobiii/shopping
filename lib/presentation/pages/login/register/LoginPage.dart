@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping/presentation/pages/login/register/SignUpPage.dart';
 import 'package:shopping/presentation/widgets/bottom_navigation.dart';
 import 'package:shopping/presentation/widgets/textfield.dart';
@@ -13,6 +14,40 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> loginUser() async {
+    if (_emailController.text == "kerby@gmail.com" &&
+        _passwordController.text == "123") {
+      String userToken = "admin";
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_token', userToken);
+
+      print("Token stored: $userToken");
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const BottomNavigationScreen()),
+      );
+    } else {
+      // ScaffoldMessenger.of(
+      //   context,
+      // ).showSnackBar(SnackBar(content: Text("Invalid credentials")));
+
+      String userToken = "user";
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_token', userToken);
+
+      print("Token stored: $userToken");
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const BottomNavigationScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 40),
               CustomTextFormField(
+                controller: _emailController,
                 labelText: 'Email',
                 icon: Icons.person_outline_outlined,
                 keyboardType: TextInputType.text,
@@ -44,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 10),
               CustomTextFormField(
+                controller: _passwordController,
                 labelText: 'Password',
                 icon: Icons.password_outlined,
                 isPassword: true,
@@ -58,12 +95,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BottomNavigationScreen(),
-                    ),
-                  );
+                  loginUser();
                 },
                 label: const Text(
                   'Login',
