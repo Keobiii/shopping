@@ -8,6 +8,7 @@ import 'package:shopping/presentation/utils/category.dart';
 import 'package:shopping/presentation/utils/product_asset.dart';
 import 'package:shopping/presentation/utils/product_list.dart';
 import 'package:shopping/presentation/widgets/appBar.dart';
+import 'package:shopping/presentation/widgets/bottom_navigation.dart';
 import 'package:shopping/presentation/widgets/textfield.dart';
 
 class AddProduct extends StatefulWidget {
@@ -21,6 +22,11 @@ class _AddProductState extends State<AddProduct> {
   final _formKey = GlobalKey<FormState>();
 
   bool isEditingMode = false;
+
+  var _productName;
+  var _productDescription;
+  var _productQuantity;
+  var _productPrice;
 
   final _productIDController = TextEditingController();
   final _productNameController = TextEditingController();
@@ -44,9 +50,27 @@ class _AddProductState extends State<AddProduct> {
   String? selectedValue = null;
 
   @override
+  void initState() {
+    super.initState();
+
+    _productNameController.addListener(_productForm);
+    _descriptionController.addListener(_productForm);
+    _quantityController.addListener(_productForm);
+    _priceController.addListener(_productForm);
+  }
+
+  void _productForm() {
+    setState(() {
+      _productName = _productNameController.text;
+      _productDescription = _descriptionController.text;
+      _productQuantity = _quantityController.text;
+      _productPrice = _priceController.text;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Hello, Kerby!"),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -76,18 +100,6 @@ class _AddProductState extends State<AddProduct> {
           ),
           SizedBox(height: 50),
 
-          // CustomTextFormField(
-          //   controller: _productIDController,
-          //   labelText: 'Product ID',
-          //   icon: Icons.person_outline_outlined,
-          //   keyboardType: TextInputType.text,
-          //   validator: (value) {
-          //     if (value == null || value.toString().isEmpty) {
-          //       return 'Please enter some text';
-          //     }
-          //     return null;
-          //   },
-          // ),
           CustomTextFormField(
             controller: _productNameController,
             labelText: 'Product Name',
@@ -183,106 +195,163 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 20),
               Container(
                 width: double.infinity,
-                height: 150,
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        final price_ = _priceController.text;
-                        var finalPrice;
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            final price_ = _priceController.text;
+                            var finalPrice;
 
-                        final quantity_ = _quantityController.text;
-                        var finalQuan;
+                            final quantity_ = _quantityController.text;
+                            var finalQuan;
 
-                        try {
-                          finalPrice = double.parse(price_);
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Price Error: " + e.toString()),
-                            ),
-                          );
-                        }
+                            try {
+                              finalPrice = double.parse(price_);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Price Error: " + e.toString()),
+                                ),
+                              );
+                              return;
+                            }
 
-                        try {
-                          finalQuan = int.parse(quantity_);
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Quantity Error: " + e.toString()),
-                            ),
-                          );
-                        }
+                            try {
+                              finalQuan = int.parse(quantity_);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Quantity Error: " + e.toString(),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
 
-                        int categoryId = int.parse(selectedValue!);
+                            if (selectedValue == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Please select a category"),
+                                ),
+                              );
+                              return;
+                            }
 
-                        List<Product> categoryList;
-                        switch (categoryId) {
-                          case 1:
-                            categoryList = ProductList.tShirtList;
-                            break;
-                          case 2:
-                            categoryList = ProductList.poloShirtList;
-                            break;
-                          case 3:
-                            categoryList = ProductList.casualWear;
-                            break;
-                          default:
-                            throw Exception('Invalid categoryId');
-                        }
+                            int categoryId = int.parse(selectedValue!);
 
-                        final product = Product(
-                          id: 0,
-                          name: _productNameController.text,
-                          categoryId: categoryId,
-                          image: 'assets/images/casual/img2.png',
-                          description: _descriptionController.text,
-                          price: finalPrice,
-                          quantity: 1,
-                          totalQuantity: finalQuan,
-                        );
-                        context.read<ProductBloc>().add(
-                          AddProductRequest(product: product),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        elevation: 2.0,
-                        shadowColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Add Product',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                            List<Product> categoryList;
+                            switch (categoryId) {
+                              case 1:
+                                categoryList = ProductList.tShirtList;
+                                break;
+                              case 2:
+                                categoryList = ProductList.poloShirtList;
+                                break;
+                              case 3:
+                                categoryList = ProductList.casualWear;
+                                break;
+                              default:
+                                throw Exception('Invalid categoryId');
+                            }
+
+                            final product = Product(
+                              id: 0,
+                              name: _productNameController.text,
+                              categoryId: categoryId,
+                              image: 'assets/images/casual/img2.png',
+                              description: _descriptionController.text,
+                              price: finalPrice,
+                              quantity: 1,
+                              totalQuantity: finalQuan,
+                            );
+
+                            context.read<ProductBloc>().add(
+                              AddProductRequest(product: product),
+                            );
+
+                            // Clear inputs
+                            _productIDController.clear();
+                            _productNameController.clear();
+                            _quantityController.clear();
+                            _descriptionController.clear();
+                            _priceController.clear();
+                            setState(() {
+                              selectedValue = null;
+                            });
+
+                            // Navigate
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => BottomNavigationScreen(),
+                              ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFFCFCFF),
+                          side: const BorderSide(
+                            color: Color.fromARGB(255, 160, 160, 160),
+                            width: 1,
                           ),
-                        ],
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                        ),
+                        child: Text(
+                          'Add Product',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                     ),
 
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        elevation: 2.0,
-                        shadowColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                    SizedBox(height: 30),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _productIDController.text = "";
+                          _productNameController.text = "";
+                          _quantityController.text = "";
+                          _descriptionController.text = "";
+                          _priceController.text = "";
+                          selectedValue = null;
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => BottomNavigationScreen(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 187, 187, 187),
+                          side: const BorderSide(
+                            color: Color.fromARGB(255, 160, 160, 160),
+                            width: 1,
+                          ),
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'Cancel',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                        child: Text(
+                          'Cancel',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),

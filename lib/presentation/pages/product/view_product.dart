@@ -4,6 +4,7 @@ import 'package:shopping/presentation/pages/product/add_product.dart';
 import 'package:shopping/presentation/pages/product/edit_product.dart';
 import 'package:shopping/presentation/state/bloc/product_bloc.dart';
 import 'package:shopping/presentation/state/states/product_state.dart';
+import 'package:shopping/presentation/widgets/appBar.dart';
 
 class ViewProduct extends StatelessWidget {
   const ViewProduct({super.key});
@@ -11,7 +12,7 @@ class ViewProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('View Student List')),
+      appBar: const CustomAppBar(title: "Product List"),
       body: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {
           // if (state is DeleteStudentData) {
@@ -21,20 +22,45 @@ class ViewProduct extends StatelessWidget {
         builder: (context, state) {
           return Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => AddProduct()));
-                },
-                child: Text('Add Product'),
+              SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => AddProduct()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 252, 228, 14),
+                      side: const BorderSide(color: Colors.black, width: 1),
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    child: Text(
+                      'Add Product',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
               ),
+              SizedBox(height: 30),
               // Wrapping BlocBuilder with Expanded to avoid unbounded height error
               Expanded(
                 child: BlocBuilder<ProductBloc, ProductState>(
                   builder: (context, state) {
                     if (state is ProductLoaded) {
                       final products = state.product_model;
+
                       if (products.isEmpty) {
                         return Center(child: Text('No product added.'));
                       }
@@ -43,54 +69,137 @@ class ViewProduct extends StatelessWidget {
                         itemCount: products.length,
                         itemBuilder: (context, index) {
                           final product = products[index];
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                '#${product.id}',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              // Data
-                              Column(
+                          final isDivisible = index % 2 == 0;
+                          return Container(
+                            color:
+                                isDivisible
+                                    ? Color.fromARGB(138, 230, 230, 230)
+                                    : Colors.white,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    '${product.name}',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                  Text(
-                                    '\$' +
-                                        '${product.price} - Qty: ${product.quantity}',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) => EditProduct(
-                                                productId: product.id,
-                                              ),
+                                  // Text(
+                                  //   '#${product.id}',
+                                  //   style: TextStyle(fontSize: 12),
+                                  // ),
+                                  // Data
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                            255,
+                                            97,
+                                            97,
+                                            97,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
                                         ),
-                                      );
-                                    },
-                                    child: Text('Edit'),
+                                        child: Image.asset(
+                                          product.image,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      SizedBox(width: 20),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${product.name}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Qty: ${product.quantity}',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      context.read<ProductBloc>().add(
-                                        ProductDeleteRequest(id: product.id),
-                                      );
-                                    },
-                                    child: Text('Delete'),
+                                  Column(
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) => EditProduct(
+                                                    productId: product.id,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        child: Text('Edit'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder:
+                                                (
+                                                  BuildContext context,
+                                                ) => AlertDialog(
+                                                  title: const Text('Warning!'),
+                                                  content: const Text(
+                                                    'Do you want to delete this product?',
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed:
+                                                          () => Navigator.pop(
+                                                            context,
+                                                            'Cancel',
+                                                          ),
+                                                      child: const Text(
+                                                        'Cancel',
+                                                      ),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        context
+                                                            .read<ProductBloc>()
+                                                            .add(
+                                                              ProductDeleteRequest(
+                                                                id: product.id,
+                                                              ),
+                                                            );
+
+                                                        Navigator.pop(
+                                                          context,
+                                                          'Confirm',
+                                                        );
+                                                      },
+                                                      child: const Text(
+                                                        'Confirm',
+                                                      ), // Updated text
+                                                    ),
+                                                  ],
+                                                ),
+                                          );
+                                        },
+                                        child: Text('Delete'),
+                                      ),
+                                    ],
                                   ),
+                                  // Actions
                                 ],
                               ),
-                              // Actions
-                            ],
+                            ),
                           );
                         },
                       );
@@ -105,4 +214,8 @@ class ViewProduct extends StatelessWidget {
       ),
     );
   }
+
+  // Widget build(BuildContext context) {
+  //   return
+  // }
 }

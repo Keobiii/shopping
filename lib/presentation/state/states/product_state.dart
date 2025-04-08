@@ -66,3 +66,11 @@ final class UpdateProductData extends ProductState {
   final Product updatedProduct;
   UpdateProductData({required this.updatedProduct});
 }
+
+final class ErrorState extends ProductState {
+  final String error;
+
+  ErrorState({required this.error});
+}
+
+final class IsLoading extends ProductState {}
