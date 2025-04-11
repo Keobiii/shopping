@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping/core/utils/sharedpreference.dart';
 import 'package:shopping/main.dart';
@@ -17,6 +18,9 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
+    final _myBox = Hive.box('mybox');
+    print('Deleting ' + _myBox.get(2).toString());
+    _myBox.delete(2);
     loadUserToken();
   }
 
@@ -38,13 +42,12 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Hello $userToken'),
+            Text('Hello $userToken', style: TextStyle(color: Colors.white)),
             ElevatedButton(
               onPressed: () {
                 logout();

@@ -21,7 +21,6 @@ class _WishlistPageState extends State<WishlistPage> {
     // final favoriteList = provider.favorites;
     return Scaffold(
       appBar: const CustomAppBar(title: "Hello, Kerby!"),
-      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(
@@ -30,7 +29,11 @@ class _WishlistPageState extends State<WishlistPage> {
               children: const [
                 Text(
                   "WishList",
-                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 27,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -42,7 +45,12 @@ class _WishlistPageState extends State<WishlistPage> {
                 final favorites = state.favorites;
 
                 if (favorites.isEmpty) {
-                  return const Center(child: Text('No favorites added yet.'));
+                  return const Center(
+                    child: Text(
+                      'No favorites added yet.',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
                 }
 
                 return Expanded(
@@ -59,10 +67,7 @@ class _WishlistPageState extends State<WishlistPage> {
                             color: Colors.red,
                             alignment: Alignment.centerRight,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ),
+                            child: Icon(Icons.delete, color: Colors.white),
                           ),
                           onDismissed: (direction) {
                             // Handle the dismiss action here
@@ -100,19 +105,11 @@ class _WishlistPageState extends State<WishlistPage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product.description,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    'Left: ${product.totalQuantity}',
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              subtitle: Text(
+                                'Left: ${product.totalQuantity}',
+                                overflow: TextOverflow.ellipsis,
                               ),
+
                               leading: CircleAvatar(
                                 radius: 30,
                                 backgroundImage: AssetImage(product.image),
@@ -133,7 +130,12 @@ class _WishlistPageState extends State<WishlistPage> {
                   ),
                 );
               } else {
-                return const Center(child: Text('No favorites added yet.'));
+                return const Center(
+                  child: Text(
+                    'No favorites added yet.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
               }
             },
           ),

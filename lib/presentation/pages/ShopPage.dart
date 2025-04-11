@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive/hive.dart';
 import 'package:shopping/presentation/state/bloc/product_bloc.dart';
 import 'package:shopping/presentation/state/states/product_state.dart';
 import 'package:shopping/presentation/utils/category.dart';
@@ -19,13 +20,20 @@ class ShopPage extends StatefulWidget {
 
 class _ShopPageState extends State<ShopPage> {
   int isSelected = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final _myBox = Hive.box('mybox');
+    print('Data Recieved in Shop Page:' + _myBox.get(2).toString());
+  }
+
   final List<Map<String, dynamic>> dataList = categories;
   @override
   Widget build(BuildContext context) {
     print('Selected index: ' + isSelected.toString());
     return Scaffold(
       appBar: const CustomAppBar(title: "Hello, Kerby!"),
-      backgroundColor: Colors.white,
       body: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {
           // TODO: implement listener

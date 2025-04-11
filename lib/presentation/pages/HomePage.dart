@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/presentation/pages/details/CartDetailsPage.dart';
 import 'package:shopping/presentation/pages/details/ProductDetailsPage.dart';
 import 'package:shopping/presentation/utils/banner_image.dart';
@@ -40,22 +42,27 @@ class _HomePageState extends State<HomePage> {
   late PageController _pageController;
   Timer? _timer;
   int _currentIndex = 0;
+  String? data;
+
+  final ValueNotifier<int> _currentIndexNotifier = ValueNotifier<int>(0);
 
   @override
   void initState() {
     super.initState();
+    final _myBox = Hive.box('mybox');
+    data = _myBox.get(2);
 
     _pageController = PageController();
 
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      if (_currentIndex < BannerImage.values.length - 1) {
-        _currentIndex++;
+      if (_currentIndexNotifier.value < BannerImage.values.length - 1) {
+        _currentIndexNotifier.value++;
       } else {
-        _currentIndex = 0;
+        _currentIndexNotifier.value = 0;
       }
 
       _pageController.animateToPage(
-        _currentIndex,
+        _currentIndexNotifier.value,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
@@ -73,62 +80,13 @@ class _HomePageState extends State<HomePage> {
   final List<Map<String, dynamic>> dataList = categories;
   @override
   Widget build(BuildContext context) {
-    // Controller of Page View
-    // we want to achieve a automically scroll
-    // inital controller and the inital value is to be set to 0 (first image)
-    // final PageController _pageController = PageController(initialPage: 0);
-    // int currentPage = 0;
-    // late Timer timer;
-
-    // @override
-    // void initState() {
-    //   super.initState();
-
-    //   // Print statements for debugging
-    //   print('Banner Image Length: ' + BannerImage.values.length.toString());
-    //   print('Images List Length: ' + images.length.toString());
-
-    //   // Initialize timer
-    //   timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-    //     // Make sure the widget is still mounted before calling setState
-    //     if (mounted) {
-    //       setState(() {
-    //         // Ensure currentPage doesn't exceed the index bounds
-    //         if (currentPage < images.length - 1) {
-    //           currentPage++;
-    //         } else {
-    //           currentPage = 0;
-    //         }
-    //         // Print the currentPage value for debugging
-    //         print('Current Page: $currentPage');
-
-    //         // Animate to the next page
-    //         _pageController.animateToPage(
-    //           currentPage,
-    //           duration: const Duration(milliseconds: 200),
-    //           curve: Curves.easeIn,
-    //         );
-    //       });
-    //     } else {
-    //       print("Timer fired but widget is no longer mounted.");
-    //     }
-    //   });
-    // }
-
-    // @override
-    // void dispose() {
-    //   // Cancel the timer when the widget is disposed
-    //   timer.cancel();
-    //   super.dispose();
-    // }
-
+    print('Hive Data: $data');
     return Scaffold(
       appBar: const CustomAppBar(title: "Hello, Kerby!"),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _caoursel(context),
+            _carousel(context),
             Padding(padding: const EdgeInsets.all(20.0), child: ProductsUI()),
           ],
         ),
@@ -136,110 +94,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // _buildProductCategory({required int index, required String name}) =>
-  // GestureDetector(
-  //   onTap: () {
-  //     setState(() {
-  //       isSelected = index;
-  //     });
-  //   },
-  //   child: Container(
-  //     width: 100,
-  //     height: 40,
-  //     margin: const EdgeInsets.only(top: 10, right: 10),
-  //     alignment: Alignment.center,
-  //     decoration: BoxDecoration(
-  //       color: isSelected == index ? Colors.black : Colors.transparent,
-  //       borderRadius: BorderRadius.circular(50),
-  //       border: Border.all(color: const Color.fromARGB(255, 90, 90, 90))
-  //     ),
-  //     child: Text(
-  //       name,
-  //       style: TextStyle(
-  //         color: isSelected == index ? Colors.white : Colors.black
-  //       ),
-  //     ),
-  //   ),
-  // );
-
-  // // All Product Grid
-  // _buildAllProudcts() => GridView.builder(
-  //   shrinkWrap: true, // ✅allow the grid to take space as needed
-  //   physics: const NeverScrollableScrollPhysics(), // ✅ preventing grid from scolling seperate
-  //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //     crossAxisCount: 2, // 2 column per row
-  //     childAspectRatio: (100 / 150), // width and height ratio
-  //     crossAxisSpacing: 12, // horizontal spacing
-  //     mainAxisSpacing: 12, // vertical spacing
-  //   ),
-  //   itemCount: ProductList.allProducts.length,
-  //   itemBuilder: (context, index) {
-  //     final allProducts = ProductList.allProducts[index];
-  //     return GestureDetector(
-  //       onTap: () {
-  //         Navigator.push(
-  //           context, MaterialPageRoute(
-  //             builder: (context) =>
-  //               ProductDetailsPage(product: allProducts,),
-  //           ),
-  //         );
-  //       },
-  //       child: ProductCard(
-  //         product: allProducts
-  //       )
-  //     );
-  //   },
-  // );
-
-  // // T-Shirt Grid
-  // _buildTShirtProudcts() => GridView.builder(
-  //   shrinkWrap: true, // ✅allow the grid to take space as needed
-  //   physics: const NeverScrollableScrollPhysics(), // ✅ preventing grid from scolling seperate
-  //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //     crossAxisCount: 2, // 2 column per row
-  //     childAspectRatio: (100 / 150), // width and height ratio
-  //     crossAxisSpacing: 12, // horizontal spacing
-  //     mainAxisSpacing: 12, // vertical spacing
-  //   ),
-  //   itemCount: ProductList.tShirtList.length,
-  //   itemBuilder: (context, index) {
-  //     final tshirtList = ProductList.tShirtList[index];
-  //     return ProductCard(product: tshirtList);
-  //   },
-  // );
-
-  //   // Polo-Shirt Grid
-  // _buildPShirtProudcts() => GridView.builder(
-  //   shrinkWrap: true, // ✅allow the grid to take space as needed
-  //   physics: const NeverScrollableScrollPhysics(), // ✅ preventing grid from scolling seperate
-  //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //     crossAxisCount: 2, // 2 column per row
-  //     childAspectRatio: (100 / 150), // width and height ratio
-  //     crossAxisSpacing: 12, // horizontal spacing
-  //     mainAxisSpacing: 12, // vertical spacing
-  //   ),
-  //   itemCount: ProductList.poloShirtList.length,
-  //   itemBuilder: (context, index) {
-  //     final poloShirtList = ProductList.poloShirtList[index];
-  //     return ProductCard(product: poloShirtList);
-  //   },
-  // );
-
-  Container _caoursel(BuildContext context) {
+  Container _carousel(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.20,
       width: double.infinity,
-      child: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+      child: ValueListenableBuilder<int>(
+        valueListenable: _currentIndexNotifier,
+        builder: (context, currentIndex, child) {
+          return PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              _currentIndexNotifier.value = index;
+            },
+            children: [
+              for (var bannerItem in BannerImage.values)
+                CaourselItem(bannerItem.imageAsset),
+            ],
+          );
         },
-        children: [
-          for (var bannerItem in BannerImage.values)
-            CaourselItem(bannerItem.imageAsset),
-        ],
       ),
     );
   }
@@ -255,92 +127,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  // Container _searchBar() {
-  //   return Container(
-  //         margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-  //         decoration: BoxDecoration(
-  //           boxShadow: [
-  //             BoxShadow(
-  //               color: Color(0xFF1d1617).withOpacity(0.11),
-  //               blurRadius: 40,
-  //               spreadRadius: 0.0
-  //             )
-  //           ]
-  //         ),
-  //         child: TextField(
-  //           decoration: InputDecoration(
-  //             filled: true,
-  //             fillColor: Colors.white,
-  //             contentPadding: EdgeInsets.all(15),
-  //             prefixIcon: Padding(
-  //               padding: const EdgeInsets.all(12),
-  //               child: SvgPicture.asset(
-  //                 'assets/vectors/search.svg',
-  //                 colorFilter: ColorFilter.mode(
-  //                   Colors.grey,
-  //                   BlendMode.srcIn
-  //                 ),
-  //               ),
-  //             ),
-  //             suffixIcon: Padding(
-  //               padding: const EdgeInsets.all(12),
-  //               child: SvgPicture.asset(
-  //                 'assets/vectors/filter.svg',
-  //                 colorFilter: ColorFilter.mode(
-  //                   Colors.grey,
-  //                   BlendMode.srcIn
-  //                 ),
-  //               ),
-  //             ),
-  //             border: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(15),
-  //               borderSide: BorderSide.none
-  //             )
-  //           ),
-  //         ),
-  //       );
-  // }
-
-  // AppBar appBar() {
-  //   return AppBar(
-  //     title: Text(
-  //       'Hello, Kerby!',
-  //       style: TextStyle(
-  //         color: Colors.black,
-  //         fontSize: 18,
-  //         fontWeight: FontWeight.bold
-  //       ),
-  //     ),
-  //     backgroundColor: Colors.white,
-  //     elevation: 0,
-  //     centerTitle: false,
-  //     actions: [
-  //       GestureDetector(
-  //         onTap: (){
-  //           Navigator.push(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (context) => const CartListPage(),
-  //             )
-  //           );
-  //         },
-  //         child: Container(
-  //           margin: EdgeInsets.all(10),
-  //           alignment: Alignment.center,
-  //           width: 37,
-  //           child: SvgPicture.asset(
-  //             'assets/vectors/cart.svg',
-  //             height: 20,
-  //             width: 20,
-  //           ),
-  //           decoration: BoxDecoration(
-  //             color: Color(0xFFf7f8f8),
-  //             borderRadius: BorderRadius.circular(10)
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 }

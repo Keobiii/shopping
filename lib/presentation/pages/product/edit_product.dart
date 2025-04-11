@@ -61,11 +61,7 @@ class _EditProductState extends State<EditProduct> {
     selectedValue = product.categoryId.toString();
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
+      appBar: AppBar(automaticallyImplyLeading: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -88,24 +84,28 @@ class _EditProductState extends State<EditProduct> {
             children: [
               const Text(
                 'Update Product',
-                style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 27,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
           SizedBox(height: 50),
 
-          CustomTextFormField(
-            controller: _editProductIDController,
-            labelText: 'Product ID',
-            icon: Icons.person_outline_outlined,
-            keyboardType: TextInputType.text,
-            validator: (value) {
-              if (value == null || value.toString().isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
+          // CustomTextFormField(
+          //   controller: _editProductIDController,
+          //   labelText: 'Product ID',
+          //   icon: Icons.person_outline_outlined,
+          //   keyboardType: TextInputType.text,
+          //   validator: (value) {
+          //     if (value == null || value.toString().isEmpty) {
+          //       return 'Please enter some text';
+          //     }
+          //     return null;
+          //   },
+          // ),
           CustomTextFormField(
             controller: _editProductNameController,
             labelText: 'Product Name',
@@ -125,25 +125,34 @@ class _EditProductState extends State<EditProduct> {
             children: [
               Text(
                 'Category',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
               ),
               SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2),
+                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2),
+                    borderSide: BorderSide(color: Colors.white, width: 2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Colors.transparent,
                 ),
+
                 validator:
                     (value) => value == null ? "Select a category" : null,
-                dropdownColor: Colors.white,
+                dropdownColor: Colors.black,
                 value: selectedValue,
                 onChanged: (String? newValue) {
                   setState(() {
@@ -151,6 +160,7 @@ class _EditProductState extends State<EditProduct> {
                   });
                 },
                 items: dropdownItems,
+                style: TextStyle(color: Colors.white),
               ),
 
               SizedBox(height: 20),

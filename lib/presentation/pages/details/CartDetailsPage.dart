@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping/presentation/pages/HomePage.dart';
 import 'package:shopping/presentation/state/bloc/cart_bloc.dart';
 import 'package:shopping/presentation/state/states/cart_state.dart';
+import 'package:shopping/presentation/utils/Palette.dart';
 import 'package:shopping/presentation/widgets/bottom_navigation.dart';
 
 class CartListPage extends StatefulWidget {
@@ -35,8 +36,8 @@ class _CartListPageState extends State<CartListPage> {
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: const Color.fromARGB(255, 255, 255, 255),
-            border: Border.all(color: Colors.black, width: 1),
+            color: Colors.black,
+            border: Border.all(color: Colors.white, width: 1),
           ),
           child: Icon(icon, size: 20),
         ),
@@ -47,10 +48,9 @@ class _CartListPageState extends State<CartListPage> {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         elevation: 1.0,
       ),
-      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(
@@ -59,7 +59,11 @@ class _CartListPageState extends State<CartListPage> {
               children: [
                 Text(
                   "Cart",
-                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 27,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -146,7 +150,7 @@ class _CartListPageState extends State<CartListPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    _buildProductQuantity(Icons.add, index),
+                                    _buildProductQuantity(Icons.remove, index),
                                     Text(
                                       '${carts[index].quantity}',
                                       style: const TextStyle(
@@ -154,7 +158,7 @@ class _CartListPageState extends State<CartListPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    _buildProductQuantity(Icons.remove, index),
+                                    _buildProductQuantity(Icons.add, index),
                                   ],
                                 ),
                               ),
@@ -184,7 +188,7 @@ class _CartListPageState extends State<CartListPage> {
           }
         },
         child: BottomAppBar(
-          color: Colors.white,
+          color: Pallete.backgroundColor,
           child: ElevatedButton.icon(
             onPressed: () {
               context.read<CartBloc>().add(CheckoutEvent());
@@ -198,7 +202,7 @@ class _CartListPageState extends State<CartListPage> {
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              side: const BorderSide(color: Colors.black, width: 2),
+              side: const BorderSide(color: Colors.white, width: 2),
               minimumSize: const Size(double.infinity, 50),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),

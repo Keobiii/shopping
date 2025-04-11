@@ -100,18 +100,36 @@ class _ProductCardState extends State<ProductCard> {
 
           SizedBox(height: 15),
 
-          Text(
-            widget.product.name,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          Text(
-            '\$'
-            '${widget.product.price}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                width: 150,
+                child: Text(
+                  widget.product.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: 150,
+                child: Text(
+                  '\$'
+                  '${widget.product.price}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

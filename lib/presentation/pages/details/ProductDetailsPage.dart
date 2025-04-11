@@ -56,12 +56,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.product.name.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
+                        Container(
+                          width: 250,
+                          child: Text(
+                            widget.product.name,
+                            style: const TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                         // if (widget.product.totalQuantity <= 0) {

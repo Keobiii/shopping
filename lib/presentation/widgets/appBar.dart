@@ -36,12 +36,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             width: 37,
             child: SvgPicture.asset(
               'assets/vectors/cart.svg',
-              color: Colors.white,
+              color: Colors.black,
               height: 20,
               width: 20,
             ),
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: Colors.grey,
               borderRadius: BorderRadius.circular(10),
             ),
           ),

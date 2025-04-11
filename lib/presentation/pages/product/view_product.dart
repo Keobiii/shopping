@@ -4,6 +4,7 @@ import 'package:shopping/presentation/pages/product/add_product.dart';
 import 'package:shopping/presentation/pages/product/edit_product.dart';
 import 'package:shopping/presentation/state/bloc/product_bloc.dart';
 import 'package:shopping/presentation/state/states/product_state.dart';
+import 'package:shopping/presentation/utils/Palette.dart';
 import 'package:shopping/presentation/widgets/appBar.dart';
 
 class ViewProduct extends StatelessWidget {
@@ -73,8 +74,8 @@ class ViewProduct extends StatelessWidget {
                           return Container(
                             color:
                                 isDivisible
-                                    ? Color.fromARGB(138, 230, 230, 230)
-                                    : Colors.white,
+                                    ? const Color.fromARGB(255, 27, 27, 36)
+                                    : Colors.transparent,
                             child: Padding(
                               padding: EdgeInsets.all(10),
                               child: Row(
@@ -90,23 +91,31 @@ class ViewProduct extends StatelessWidget {
                                   Row(
                                     children: [
                                       Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                            255,
-                                            97,
-                                            97,
-                                            97,
+                                        height: 60,
+                                        width: 60,
+                                        // decoration: BoxDecoration(
+                                        //   color: const Color.fromARGB(
+                                        //     255,
+                                        //     97,
+                                        //     97,
+                                        //     97,
+                                        //   ),
+                                        //   borderRadius: BorderRadius.circular(
+                                        //     10,
+                                        //   ),
+                                        // ),
+                                        child: CircleAvatar(
+                                          radius: 30,
+                                          backgroundImage: AssetImage(
+                                            product.image,
                                           ),
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
+                                          backgroundColor: Colors.grey.shade100,
                                         ),
-                                        child: Image.asset(
-                                          product.image,
-                                          fit: BoxFit.contain,
-                                        ),
+
+                                        // Image.asset(
+                                        //   product.image,
+                                        //   fit: BoxFit.contain,
+                                        // ),
                                       ),
                                       SizedBox(width: 20),
                                       Column(
@@ -118,6 +127,7 @@ class ViewProduct extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
+                                              color: Colors.white,
                                             ),
                                           ),
                                           Text(
@@ -125,6 +135,7 @@ class ViewProduct extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w500,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ],
@@ -144,7 +155,16 @@ class ViewProduct extends StatelessWidget {
                                             ),
                                           );
                                         },
-                                        child: Text('Edit'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.yellowAccent,
+                                        ),
+                                        child: Text(
+                                          'Edit',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
@@ -192,7 +212,16 @@ class ViewProduct extends StatelessWidget {
                                                 ),
                                           );
                                         },
-                                        child: Text('Delete'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                        child: Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),

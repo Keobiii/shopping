@@ -24,7 +24,11 @@ class _ProductsUIState extends State<ProductsUI> {
       children: [
         const Text(
           'Our Products',
-          style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 27,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         SizedBox(height: 15),
         // Chips
@@ -57,6 +61,7 @@ class _ProductsUIState extends State<ProductsUI> {
         //     ? ProductGrid(products: ProductList.poloShirtList)
         //     : ProductGrid(products: ProductList.casualWear),
         Container(
+          alignment: Alignment.center,
           child: BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
               if (state is ProductLoaded) {
@@ -92,7 +97,12 @@ class _ProductsUIState extends State<ProductsUI> {
                               .toList(),
                     );
               }
-              return Center(child: Text('No Product Available'));
+              return Center(
+                child: Text(
+                  'No Product Available',
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
             },
           ),
         ),

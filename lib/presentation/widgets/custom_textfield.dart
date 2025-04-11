@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopping/presentation/utils/Palette.dart';
 
-class CustomTextFormField extends StatefulWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String labelText;
   final IconData icon;
@@ -8,7 +9,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool isPassword;
   final FormFieldValidator validator;
 
-  const CustomTextFormField({
+  const CustomTextField({
     super.key,
     this.controller,
     required this.labelText,
@@ -19,10 +20,10 @@ class CustomTextFormField extends StatefulWidget {
   });
 
   @override
-  _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
+  _CustomTextFieldState createState() => _CustomTextFieldState();
 }
 
-class _CustomTextFormFieldState extends State<CustomTextFormField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   late bool _isPassword;
 
   @override
@@ -33,63 +34,56 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: double.infinity),
       child: TextFormField(
         controller: widget.controller,
         keyboardType: widget.keyboardType,
         obscureText: _isPassword,
         validator: widget.validator,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-        ),
         cursorColor: Colors.white,
+        style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
-          labelText: widget.labelText,
-          labelStyle: const TextStyle(
-            color: Color(0x80FFFFFF),
-            fontSize: 14,
-          ),
-          floatingLabelStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-          prefixIcon: Icon(
-            widget.icon,
-            color: Colors.white,
-            size: 20,
-          ),
-         // condtion if the keyboardtype is password, this will triggered
-          suffixIcon: widget.keyboardType == TextInputType.visiblePassword
-              ? IconButton(
-                  icon: Icon(
-                    _isPassword ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.white30,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isPassword = !_isPassword;
-                    });
-                  },
-                )
-              : null,
-          hintStyle: const TextStyle(
-            color: Color(0x80FFFFFF),
-            fontSize: 14,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: Color(0x80FFFFFF)),
-          ),
+          suffixIcon:
+              widget.keyboardType == TextInputType.visiblePassword
+                  ? Padding(
+                    padding: EdgeInsets.only(right: 12.0),
+                    child: IconButton(
+                      icon: Icon(
+                        _isPassword ? Icons.visibility_off : Icons.visibility,
+                        color: const Color.fromARGB(255, 170, 170, 170),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPassword = !_isPassword;
+                        });
+                      },
+                    ),
+                  )
+                  : null,
+          contentPadding: const EdgeInsets.all(23),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: Color(0x80FFFFFF)),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 200, 200, 200),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10),
           ),
+
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: Colors.white, width: 2),
+            borderSide: const BorderSide(color: Pallete.whiteColor, width: 2),
+            borderRadius: BorderRadius.circular(10),
           ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.red, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          errorStyle: TextStyle(color: Colors.redAccent, height: 2),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.redAccent, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          hintText: widget.labelText,
         ),
       ),
     );

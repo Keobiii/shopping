@@ -23,14 +23,15 @@ class ProductCategory extends StatelessWidget {
         margin: const EdgeInsets.only(top: 10, right: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selectedIndex == index ? Colors.black : Colors.transparent,
+          color: selectedIndex == index ? Colors.white : Colors.transparent,
           borderRadius: BorderRadius.circular(50),
           border: Border.all(color: const Color.fromARGB(255, 90, 90, 90)),
         ),
         child: Text(
           name,
           style: TextStyle(
-            color: selectedIndex == index ? Colors.white : Colors.black,
+            color: selectedIndex == index ? Colors.black : Colors.white,
+            fontWeight: FontWeight.bold,
             fontSize: 12,
           ),
         ),

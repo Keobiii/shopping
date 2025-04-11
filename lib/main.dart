@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping/data/providers/cart_provider.dart';
 import 'package:shopping/data/providers/favorite_provider.dart';
@@ -8,12 +10,16 @@ import 'package:shopping/presentation/pages/login/register/SignUpPage.dart';
 import 'package:shopping/presentation/state/bloc/cart_bloc.dart';
 import 'package:shopping/presentation/state/bloc/favorite_bloc.dart';
 import 'package:shopping/presentation/state/bloc/product_bloc.dart';
+import 'package:shopping/presentation/utils/Palette.dart';
 import 'package:shopping/presentation/widgets/bottom_navigation.dart';
 import 'package:shopping/presentation/widgets/google_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('mybox');
   runApp(const MyApp());
 }
 
@@ -58,7 +64,10 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(textTheme: GoogleFonts.merriweatherTextTheme()),
+        theme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: Pallete.backgroundColor,
+          textTheme: GoogleFonts.montserratTextTheme(),
+        ),
         home: _currentScreen,
       ),
     );
